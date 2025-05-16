@@ -9,15 +9,22 @@ public class SwordController : MonoBehaviour
     public AudioClip attackSound;
     public AudioClip hitSound;
     private bool hitEnemy = false;
+    private EnemyCollision enemyCollision;
+
+    private void Awake()
+    {
+        enemyCollision = Sword.GetComponent<EnemyCollision>();
+    }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && attackAllowed) {
+        if (Input.GetMouseButtonDown(0) && attackAllowed)
+        {
             attackAllowed = false;
             Animator swordAnimation = Sword.GetComponent<Animator>();
             swordAnimation.SetTrigger("Attack");
             StartCoroutine(HandleAttackSound());
-            StartCoroutine(ResetCooldwon());
+            StartCoroutine(ResetCooldown());
         }
     }
 
@@ -34,9 +41,14 @@ public class SwordController : MonoBehaviour
             GetComponent<AudioSource>().PlayOneShot(attackSound);
         }
     }
-    IEnumerator ResetCooldwon() {
+    IEnumerator ResetCooldown()
+    {
         yield return new WaitForSeconds(cooldown);
         attackAllowed = true;
         hitEnemy = false;
+        if (enemyCollision != null)
+        {
+            enemyCollision.ResetHit();
+        }
     }
 }

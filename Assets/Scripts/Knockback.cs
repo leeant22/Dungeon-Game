@@ -5,7 +5,7 @@ using System.Collections;
 public class Knockback : MonoBehaviour
 {
     private Rigidbody rb;
-    private float strength = 40f;
+    private float strength = 60f;
     private float delay = 0.15f;
     public UnityEvent OnBegin, OnDone;
 
