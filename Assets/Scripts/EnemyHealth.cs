@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -23,5 +24,18 @@ public class EnemyHealth : MonoBehaviour
     {
         Animator dieAnimation = GetComponent<Animator>();
         dieAnimation.SetTrigger("Kill");
+        StartCoroutine(WaitForDeathAnimation(dieAnimation));
+    }
+
+    private IEnumerator WaitForDeathAnimation(Animator animator)
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        while (!stateInfo.IsName("Die01"))
+        {
+            yield return null;
+            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        }
+        yield return new WaitForSeconds(stateInfo.length);
+        Destroy(gameObject);
     }
 }

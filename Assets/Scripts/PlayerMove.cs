@@ -17,28 +17,68 @@ public class PlayerMove : MonoBehaviour
     public float airMultiplier;
     bool readyToJump;
     public KeyCode jumpKey = KeyCode.Space;
+    public AudioClip footstepClip;
+    private AudioSource footstepAudio;
+    public float stepInterval = 2f;
+    private float stepTimer;
+    public AudioClip jumpStartClip;
+    public AudioClip jumpLandClip;
+    private bool wasGroundedLastFrame;
+    private bool hasLandedOnce = false;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
+
+        footstepAudio = gameObject.AddComponent<AudioSource>();
+        footstepAudio.clip = footstepClip;
+        footstepAudio.loop = false;
+        footstepAudio.playOnAwake = false;
     }
 
     private void Update()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 2f, whatIsGround);
-        // Debug.DrawRay(transform.position, Vector3.down * (2f), Color.red);
+        bool wasGrounded = isGrounded;
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 2.1f, whatIsGround);
 
         MyInput();
         SpeedControl();
         if (isGrounded)
         {
             rb.drag = groundDrag;
+
+            if (!wasGrounded && hasLandedOnce)
+            {
+                footstepAudio.PlayOneShot(jumpLandClip);
+            }
+            else if (!hasLandedOnce)
+            {
+                hasLandedOnce = true;
+            }
+
+            bool isMoving = hInput != 0 || vInput != 0;
+            if (isMoving)
+            {
+                stepTimer -= Time.deltaTime;
+                if (stepTimer <= 0f)
+                {
+                    footstepAudio.PlayOneShot(footstepClip);
+                    stepTimer = stepInterval;
+                }
+            }
+            else
+            {
+                stepTimer = 0f;
+            }
         }
         else
         {
             rb.drag = 0;
+            stepTimer = 0f;
         }
+
+        wasGroundedLastFrame = isGrounded;
     }
 
     private void FixedUpdate()
@@ -85,6 +125,7 @@ public class PlayerMove : MonoBehaviour
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        footstepAudio.PlayOneShot(jumpStartClip);
     }
 
     private void ResetJump()
