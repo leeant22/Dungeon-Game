@@ -29,7 +29,7 @@ public class SwordController : MonoBehaviour
 
     private IEnumerator HandleAttackSound()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.05f);
         if (!hitEnemy) {
             GetComponent<AudioSource>().PlayOneShot(attackSound);
         }
