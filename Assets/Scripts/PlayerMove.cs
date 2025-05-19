@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using TMPro;
+using UnityEngine.SceneManagement;
 public class PlayerMove : MonoBehaviour
 {
     public float moveSpeed;
@@ -25,6 +26,13 @@ public class PlayerMove : MonoBehaviour
     public AudioClip jumpLandClip;
     private bool wasGroundedLastFrame;
     private bool hasLandedOnce = false;
+    private GameObject[] collectibles;
+    private int score;
+    public TextMeshProUGUI scoreText;
+    private Vector3 startingPosition;
+    public GameObject endTextDisplay;
+    public TextMeshProUGUI endText;
+    public GameObject againButton;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,10 +43,22 @@ public class PlayerMove : MonoBehaviour
         footstepAudio.clip = footstepClip;
         footstepAudio.loop = false;
         footstepAudio.playOnAwake = false;
+
+        collectibles = GameObject.FindGameObjectsWithTag("Collectible");
+        score = 0;
+        scoreText.text = "Score: " + score.ToString();
+
+        startingPosition = transform.position;
+        endTextDisplay.SetActive(false);
+        againButton.SetActive(false);
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
         bool wasGrounded = isGrounded;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, 2.1f, whatIsGround);
 
@@ -131,5 +151,32 @@ public class PlayerMove : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Collectible"))
+        {
+            other.gameObject.SetActive(false);
+            score += 1;
+            scoreText.text = "Score: " + score.ToString();
+        }
+        else if (other.CompareTag("Lava"))
+        {
+            endTextDisplay.SetActive(true);
+            endText.text = "You died!";
+            againButton.SetActive(true);
+            rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+    }
+
+    public void ResetPlayer()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        score = 0;
+        scoreText.text = "Score: " + score.ToString();
+        endTextDisplay.SetActive(false);
+        againButton.SetActive(false);
     }
 }
