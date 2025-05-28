@@ -16,7 +16,7 @@ public class EnemyAI : MonoBehaviour
     public Vector3 walkPoint;
     private bool pointSet;
     public float walkRange;
-    public float attackCooldown;
+    public float attackCooldown = 2.5f;
     private bool attackAllowed = true;
     private Animator animator;
 
@@ -44,7 +44,8 @@ public class EnemyAI : MonoBehaviour
             animator.SetTrigger("Kill");
             return;
         }
-        if (!inRange && !inAttackRange)
+
+        if ((!inRange && !inAttackRange) || !attackAllowed)
         {
             // Wander();
             animator.SetTrigger("Idle");
@@ -58,6 +59,7 @@ public class EnemyAI : MonoBehaviour
         {
             Attack();
         }
+       
     }
 
     // private void Wander()
@@ -94,7 +96,14 @@ public class EnemyAI : MonoBehaviour
     private void Attack()
     {
         agent.isStopped = true;
-        transform.LookAt(player);
+        Vector3 direction = player.position - transform.position;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = targetRotation;
+        }
+
         if (attackAllowed)
         {
             attackAllowed = false;

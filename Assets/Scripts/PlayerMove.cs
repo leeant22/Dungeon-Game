@@ -33,6 +33,12 @@ public class PlayerMove : MonoBehaviour
     public GameObject endTextDisplay;
     public TextMeshProUGUI endText;
     public GameObject againButton;
+    private float walkSpeed = 15f;
+    private float sprintSpeed = 30f;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    private float currentSpeed;
+    private float fallMultiplier = 2f;
+    private float lowJumpMultiplier = 4f;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -63,10 +69,10 @@ public class PlayerMove : MonoBehaviour
         isGrounded = Physics.Raycast(transform.position, Vector3.down, 2.1f, whatIsGround);
 
         MyInput();
-        SpeedControl();
+        // SpeedControl();
         if (isGrounded)
         {
-            rb.drag = groundDrag;
+            rb.linearDamping = groundDrag;
 
             if (!wasGrounded && hasLandedOnce)
             {
@@ -94,7 +100,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-            rb.drag = 0;
+            rb.linearDamping = 0;
             stepTimer = 0f;
         }
 
@@ -104,12 +110,16 @@ public class PlayerMove : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        BetterJumpGravity();
     }
 
     private void MyInput()
     {
         hInput = Input.GetAxisRaw("Horizontal");
         vInput = Input.GetAxisRaw("Vertical");
+
+        currentSpeed = Input.GetKey(sprintKey) ? sprintSpeed : walkSpeed;
+
         if (Input.GetKey(jumpKey) && readyToJump && isGrounded)
         {
             readyToJump = false;
@@ -121,29 +131,38 @@ public class PlayerMove : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = orientation.forward * vInput + orientation.right * hInput;
-        if (isGrounded)
-        {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 5f, ForceMode.Force);
-        }
-        else if (!isGrounded)
-        {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 5f * airMultiplier, ForceMode.Force);
-        }
+        moveDirection.Normalize();
+        Vector3 targetVelocity = moveDirection * currentSpeed;
+        Vector3 currentVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        Vector3 velocityChange = targetVelocity - currentVelocity;
+
+        velocityChange.y = 0f;
+
+        float smoothFactor = isGrounded ? 10f : 2f;
+        rb.AddForce(velocityChange * smoothFactor, ForceMode.Acceleration);
+        //if (isGrounded)
+        //{
+        //    rb.AddForce(moveDirection.normalized * moveSpeed * 5f, ForceMode.Force);
+        //}
+        //else if (!isGrounded)
+        //{
+        //    rb.AddForce(moveDirection.normalized * moveSpeed * 5f * airMultiplier, ForceMode.Force);
+        //}
     }
 
-    private void SpeedControl()
-    {
-        Vector3 velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        if (velocity.magnitude > moveSpeed)
-        {
-            Vector3 limitVelocity = velocity.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitVelocity.x, rb.velocity.y, limitVelocity.z);
-        }
-    }
+    //private void SpeedControl()
+    //{
+    //    Vector3 velocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+    //    if (velocity.magnitude > moveSpeed)
+    //    {
+    //        Vector3 limitVelocity = velocity.normalized * moveSpeed;
+    //        rb.linearVelocity = new Vector3(limitVelocity.x, rb.linearVelocity.y, limitVelocity.z);
+    //    }
+    //}
 
     private void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         footstepAudio.PlayOneShot(jumpStartClip);
     }
@@ -166,7 +185,7 @@ public class PlayerMove : MonoBehaviour
             endTextDisplay.SetActive(true);
             endText.text = "You died!";
             againButton.SetActive(true);
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
     }
@@ -178,5 +197,17 @@ public class PlayerMove : MonoBehaviour
         scoreText.text = "Score: " + score.ToString();
         endTextDisplay.SetActive(false);
         againButton.SetActive(false);
+    }
+
+    private void BetterJumpGravity()
+    {
+        if (rb.linearVelocity.y < 0)
+        {
+            rb.AddForce(Vector3.up * (fallMultiplier - 1) * Physics.gravity.y, ForceMode.Acceleration);
+        }
+        else if (rb.linearVelocity.y > 0 && !Input.GetKey(jumpKey))
+        {
+            rb.AddForce(Vector3.up * (lowJumpMultiplier - 1) * Physics.gravity.y, ForceMode.Acceleration);
+        }
     }
 }
