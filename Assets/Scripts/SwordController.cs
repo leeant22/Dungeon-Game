@@ -24,7 +24,7 @@ public class SwordController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(player.playerIsAlive);
+        //Debug.Log(player.playerIsAlive);
         if (Input.GetMouseButtonDown(0) && attackAllowed && player.playerIsAlive)
         {
             sCollider.enabled = true;

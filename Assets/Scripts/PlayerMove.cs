@@ -59,8 +59,8 @@ public class PlayerMove : MonoBehaviour
         score = 0;
         scoreText.text = "Score: " + score.ToString();
 
-        health = 5;
-        healthText.text = "Health: " + health.ToString();
+        // health = 5;
+        // healthText.text = "Health: " + health.ToString();
 
         startingPosition = transform.position;
         endTextDisplay.SetActive(false);
@@ -188,28 +188,29 @@ public class PlayerMove : MonoBehaviour
             score += 1;
             scoreText.text = "Score: " + score.ToString();
         }
-        else if (other.CompareTag("Lava"))
-        {
-            playerIsAlive = false;
-            health = 0;
-            healthText.text = "Health: " + health.ToString();
-            PlayerDead();
-        } 
-        else if (other.CompareTag("Club") && playerIsAlive)
-        {
-            health -= 1;
-            healthText.text = "Health: " + health.ToString();
+        // else if (other.CompareTag("Lava"))
+        // {
+        //     playerIsAlive = false;
+        //     // health = 0;
+        //     // healthText.text = "Health: " + health.ToString();
+        //     PlayerDead();
+        // } 
+        // else if (other.CompareTag("Club") && playerIsAlive)
+        // {
+        //     health -= 1;
+        //     healthText.text = "Health: " + health.ToString();
 
-            if (health <= 0)
-            {
-                playerIsAlive = false;
-                PlayerDead();
-            }
-        }
+        //     if (health <= 0)
+        //     {
+        //         playerIsAlive = false;
+        //         PlayerDead();
+        //     }
+        // }
     }
 
-    private void PlayerDead()
+    public void PlayerDead()
     {
+        playerIsAlive = false;
         endTextDisplay.SetActive(true);
         endText.text = "You died!";
         againButton.SetActive(true);

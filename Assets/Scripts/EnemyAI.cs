@@ -21,6 +21,8 @@ public class EnemyAI : MonoBehaviour
     private bool attackAllowed = true;
     private Animator animator;
     private BoxCollider clubCollider;
+    public PlayerHealth playerHealth;
+    private bool isSwinging = false;
 
     private void Awake()
     {
@@ -112,10 +114,18 @@ public class EnemyAI : MonoBehaviour
         {
             clubCollider.enabled = true;
             attackAllowed = false;
+            isSwinging = true;
             animator.ResetTrigger("Walk");
             animator.SetTrigger("Attack");
             StartCoroutine(ResetAttackTime());
             StartCoroutine(ResetCooldown());
+        }
+    }
+
+    public void Hit() {
+        if (isSwinging) 
+        {
+            playerHealth.TakeDamage();
         }
     }
 
@@ -131,5 +141,6 @@ public class EnemyAI : MonoBehaviour
     {
         yield return new WaitForSeconds(attackTime);
         clubCollider.enabled = false;
+        isSwinging = false;
     }
 }

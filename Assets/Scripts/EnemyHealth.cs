@@ -5,6 +5,9 @@ public class EnemyHealth : MonoBehaviour
 {
     public int maxHealth = 3;
     public int currHealth;
+    public Material regular;
+    public Material onHit;
+    public GameObject goblin;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,10 +17,19 @@ public class EnemyHealth : MonoBehaviour
     public void Hit()
     {
         currHealth--;
+        StartCoroutine(HitColor());
+
         if (currHealth <= 0)
         {
             Die();
         }
+    }
+
+    private IEnumerator HitColor()
+    {
+        goblin.GetComponent<Renderer>().material = onHit;
+        yield return new WaitForSeconds(0.2f);
+        goblin.GetComponent<Renderer>().material = regular;
     }
 
     private void Die()
