@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Transactions;
 public class PlayerMove : MonoBehaviour
 {
     public float moveSpeed;
@@ -39,6 +40,8 @@ public class PlayerMove : MonoBehaviour
     private float currentSpeed;
     private float fallMultiplier = 2f;
     private float lowJumpMultiplier = 4f;
+    private int health;
+    public TextMeshProUGUI healthText;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -53,6 +56,9 @@ public class PlayerMove : MonoBehaviour
         collectibles = GameObject.FindGameObjectsWithTag("Collectible");
         score = 0;
         scoreText.text = "Score: " + score.ToString();
+
+        health = 5;
+        healthText.text = "Health: " + health.ToString();
 
         startingPosition = transform.position;
         endTextDisplay.SetActive(false);
@@ -182,12 +188,27 @@ public class PlayerMove : MonoBehaviour
         }
         else if (other.CompareTag("Lava"))
         {
-            endTextDisplay.SetActive(true);
-            endText.text = "You died!";
-            againButton.SetActive(true);
-            rb.linearVelocity = Vector3.zero;
-            rb.isKinematic = true;
+            PlayerDead();
+        } 
+        else if (other.CompareTag("Club"))
+        {
+            health -= 1;
+            healthText.text = "Health: " + health.ToString();
+
+            if (health <= 0)
+            {
+                PlayerDead();
+            }
         }
+    }
+
+    private void PlayerDead()
+    {
+        endTextDisplay.SetActive(true);
+        endText.text = "You died!";
+        againButton.SetActive(true);
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
     }
 
     public void ResetPlayer()

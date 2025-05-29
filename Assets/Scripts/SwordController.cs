@@ -10,16 +10,20 @@ public class SwordController : MonoBehaviour
     public AudioClip hitSound;
     private bool hitEnemy = false;
     private EnemyCollision enemyCollision;
+    private BoxCollider sCollider;
 
     private void Awake()
     {
         enemyCollision = Sword.GetComponent<EnemyCollision>();
+        sCollider = Sword.GetComponent<BoxCollider>();
+        sCollider.enabled = false;
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) && attackAllowed)
         {
+            sCollider.enabled = true;
             attackAllowed = false;
             Animator swordAnimation = Sword.GetComponent<Animator>();
             swordAnimation.SetTrigger("Attack");
@@ -45,6 +49,7 @@ public class SwordController : MonoBehaviour
     {
         yield return new WaitForSeconds(cooldown);
         attackAllowed = true;
+        sCollider.enabled = false;
         hitEnemy = false;
         if (enemyCollision != null)
         {

@@ -17,8 +17,10 @@ public class EnemyAI : MonoBehaviour
     private bool pointSet;
     public float walkRange;
     public float attackCooldown = 2.5f;
+    public float attackTime = 1f;
     private bool attackAllowed = true;
     private Animator animator;
+    private BoxCollider clubCollider;
 
     private void Awake()
     {
@@ -26,6 +28,8 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         health = GetComponent<EnemyHealth>();
+        clubCollider = transform.Find("deb_Goblin01_W").GetComponent<BoxCollider>();
+        clubCollider.enabled = false;
     }
 
     private void Update()
@@ -106,18 +110,26 @@ public class EnemyAI : MonoBehaviour
 
         if (attackAllowed)
         {
+            clubCollider.enabled = true;
             attackAllowed = false;
             animator.ResetTrigger("Walk");
             animator.SetTrigger("Attack");
-            StartCoroutine(ResetCooldwon());
+            StartCoroutine(ResetAttackTime());
+            StartCoroutine(ResetCooldown());
         }
     }
 
-    private IEnumerator ResetCooldwon()
+    private IEnumerator ResetCooldown()
     {
         yield return new WaitForSeconds(attackCooldown);
         animator.SetTrigger("Idle");
         agent.isStopped = false;
         attackAllowed = true;
+    }
+
+    private IEnumerator ResetAttackTime()
+    {
+        yield return new WaitForSeconds(attackTime);
+        clubCollider.enabled = false;
     }
 }
