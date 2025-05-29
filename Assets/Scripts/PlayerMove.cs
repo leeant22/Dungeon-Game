@@ -40,13 +40,15 @@ public class PlayerMove : MonoBehaviour
     private float currentSpeed;
     private float fallMultiplier = 2f;
     private float lowJumpMultiplier = 4f;
-    private int health;
+    public int health;
     public TextMeshProUGUI healthText;
+    public bool playerIsAlive;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
+        playerIsAlive = true;
 
         footstepAudio = gameObject.AddComponent<AudioSource>();
         footstepAudio.clip = footstepClip;
@@ -188,15 +190,19 @@ public class PlayerMove : MonoBehaviour
         }
         else if (other.CompareTag("Lava"))
         {
+            playerIsAlive = false;
+            health = 0;
+            healthText.text = "Health: " + health.ToString();
             PlayerDead();
         } 
-        else if (other.CompareTag("Club"))
+        else if (other.CompareTag("Club") && playerIsAlive)
         {
             health -= 1;
             healthText.text = "Health: " + health.ToString();
 
             if (health <= 0)
             {
+                playerIsAlive = false;
                 PlayerDead();
             }
         }
@@ -216,6 +222,7 @@ public class PlayerMove : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         score = 0;
         scoreText.text = "Score: " + score.ToString();
+        playerIsAlive = true;
         endTextDisplay.SetActive(false);
         againButton.SetActive(false);
     }
