@@ -16,10 +16,16 @@ public class PlayerHealth : MonoBehaviour
         healthHandle.SetActive(true);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject sender)
     {
         health -= damage;
         healthBar.size = health/100.0f;
+
+        Knockback knockback = GetComponent<Knockback>();
+        if (knockback != null && sender != null)
+        {
+            knockback.PlayFeedback(sender);
+        }
 
         if (health <= -10)
         {
@@ -28,16 +34,16 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void TakeDamage()
+    public void TakeDamage(GameObject sender)
     {
-        TakeDamage(10);
+        TakeDamage(10, sender);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Lava"))
         {
-            TakeDamage(health+10);
+            TakeDamage(health+10, null);
             // playerIsAlive = false;
             // health = 0;
             // healthText.text = "Health: " + health.ToString();

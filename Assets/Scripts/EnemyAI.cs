@@ -23,6 +23,7 @@ public class EnemyAI : MonoBehaviour
     private BoxCollider clubCollider;
     public PlayerHealth playerHealth;
     private bool isSwinging = false;
+    private GameObject goblin;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class EnemyAI : MonoBehaviour
         health = GetComponent<EnemyHealth>();
         clubCollider = transform.Find("deb_Goblin01_W").GetComponent<BoxCollider>();
         clubCollider.enabled = false;
+        goblin = transform.Find("deb_Goblin01_W").gameObject;
     }
 
     private void Update()
@@ -125,7 +127,7 @@ public class EnemyAI : MonoBehaviour
     public void Hit() {
         if (isSwinging) 
         {
-            playerHealth.TakeDamage();
+            playerHealth.TakeDamage(goblin);
         }
     }
 
