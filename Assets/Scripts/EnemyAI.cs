@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     public bool inRange;
     public bool inAttackRange;
     public Vector3 walkPoint;
+    public AudioClip hitSound;
     private bool pointSet;
     public float walkRange;
     public float attackCooldown = 2.5f;
@@ -127,6 +128,10 @@ public class EnemyAI : MonoBehaviour
     public void Hit() {
         if (isSwinging) 
         {
+            if (playerHealth.health >= 0)
+            {
+                GetComponent<AudioSource>().PlayOneShot(hitSound);
+            }
             playerHealth.TakeDamage(goblin);
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    private int health = 90;
+    public int health = 90;
     public Scrollbar healthBar;
     public GameObject healthHandle;
     public PlayerMove playerMove;
