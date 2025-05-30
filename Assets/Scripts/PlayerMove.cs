@@ -218,6 +218,16 @@ public class PlayerMove : MonoBehaviour
         rb.isKinematic = true;
     }
 
+    public void PlayerWin()
+    {
+        playerIsAlive = false;
+        endTextDisplay.SetActive(true);
+        endText.text = "You Win!";
+        againButton.SetActive(true);
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
+    }
+
     public void ResetPlayer()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

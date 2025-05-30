@@ -43,11 +43,15 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("Lava"))
         {
-            TakeDamage(health+10, null);
+            TakeDamage(health + 10, null);
             // playerIsAlive = false;
             // health = 0;
             // healthText.text = "Health: " + health.ToString();
             playerMove.PlayerDead();
-        } 
+        }
+        if (other.gameObject.name == "WinFloor")
+        {
+            playerMove.PlayerWin();
+        }
     }
 }
