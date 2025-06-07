@@ -8,16 +8,21 @@ public class EnemyHealth : MonoBehaviour
     public Material regular;
     public Material onHit;
     public GameObject goblin;
+    public GameObject player;
+    public bool isDead;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currHealth = maxHealth;
+        player = GameObject.FindWithTag("Player");
     }
 
     public void Hit()
     {
         currHealth--;
         StartCoroutine(HitColor());
+        Knockback knockback = GetComponent<Knockback>();
+        knockback.PlayFeedback(player);
 
         if (currHealth <= 0)
         {
@@ -27,13 +32,17 @@ public class EnemyHealth : MonoBehaviour
 
     private IEnumerator HitColor()
     {
-        goblin.GetComponent<Renderer>().material = onHit;
-        yield return new WaitForSeconds(0.2f);
-        goblin.GetComponent<Renderer>().material = regular;
+        if (!isDead)
+        {
+            goblin.GetComponent<Renderer>().material = onHit;
+            yield return new WaitForSeconds(0.2f);
+            goblin.GetComponent<Renderer>().material = regular;
+        }
     }
 
     private void Die()
     {
+        isDead = true;
         Animator dieAnimation = GetComponent<Animator>();
         dieAnimation.SetTrigger("Kill");
         StartCoroutine(WaitForDeathAnimation(dieAnimation));

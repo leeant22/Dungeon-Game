@@ -2471,8 +2471,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1585406, y: 3.7653646, z: 2.964107}
-  m_Center: {x: 0.47585064, y: 1.3192382, z: 0.00093722343}
+  m_Size: {x: 1.1585406, y: 5.748399, z: 2.964107}
+  m_Center: {x: 0.66752297, y: 2.3417277, z: 0.00093722343}
 --- !u!95 &315027388
 Animator:
   serializedVersion: 7
@@ -2732,6 +2732,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8272943599224061573, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1152270346}
+    - targetCorrespondingSourceObject: {fileID: 8272943599224061573, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1152270353}
     - targetCorrespondingSourceObject: {fileID: 8272943599224061579, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 117483593}
@@ -5429,6 +5432,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8272943599224061573, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1890698073}
+    - targetCorrespondingSourceObject: {fileID: 8272943599224061573, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1890698077}
     - targetCorrespondingSourceObject: {fileID: 8272943599224061579, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1595234772}
@@ -8095,9 +8101,11 @@ MonoBehaviour:
   walkPoint: {x: 0, y: 0, z: 0}
   hitSound: {fileID: 8300000, guid: 6f0082aea98fb4cfc8617de0e484d243, type: 3}
   walkRange: 2
+  windUpTime: 0.5
   attackCooldown: 2.5
   attackTime: 1.5
   playerHealth: {fileID: 1586257568}
+  enemyHealth: {fileID: 1152270350}
 --- !u!195 &1152270345
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -8283,6 +8291,35 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0389814, y: 1.3809192, z: 1}
   m_Center: {x: -0.019488972, y: 0.6565081, z: 0}
+--- !u!114 &1152270350 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3955276084100828180, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+  m_PrefabInstance: {fileID: 334925382}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152270342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb173c6b39154047aa5fc02634f55c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1152270353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152270342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b808b9bf430074eadb5f2a5bffc083d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDone:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1162136569
 GameObject:
   m_ObjectHideFlags: 0
@@ -9532,9 +9569,11 @@ MonoBehaviour:
   walkPoint: {x: 0, y: 0, z: 0}
   hitSound: {fileID: 8300000, guid: 6f0082aea98fb4cfc8617de0e484d243, type: 3}
   walkRange: 2
+  windUpTime: 0.5
   attackCooldown: 2.5
   attackTime: 1.5
   playerHealth: {fileID: 1586257568}
+  enemyHealth: {fileID: 1308443303}
 --- !u!195 &1308443298
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -9720,6 +9759,35 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0389814, y: 1.3809192, z: 1}
   m_Center: {x: -0.019488972, y: 0.6565081, z: 0}
+--- !u!114 &1308443303 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3955276084100828180, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+  m_PrefabInstance: {fileID: 1851352813}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308443295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb173c6b39154047aa5fc02634f55c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1308443306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308443295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b808b9bf430074eadb5f2a5bffc083d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDone:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1318835564
 GameObject:
   m_ObjectHideFlags: 0
@@ -11980,7 +12048,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundDrag: 5
-  jumpForce: 12
+  jumpForce: 10
   jumpCooldown: 0.25
   airMultiplier: 0.4
   jumpKey: 32
@@ -11988,10 +12056,13 @@ MonoBehaviour:
   stepInterval: 0.5
   jumpStartClip: {fileID: 8300000, guid: f42760acdd77d6c459020ab0f9db4f30, type: 3}
   jumpLandClip: {fileID: 8300000, guid: 304f2bf2228cba94e91cd22803e54bcf, type: 3}
+  coinPickUp: {fileID: 8300000, guid: f463cfc2b6da5234f9936ae25719dc4a, type: 3}
   scoreText: {fileID: 59717341}
   endTextDisplay: {fileID: 667104883}
   endText: {fileID: 667104885}
   againButton: {fileID: 554343405}
+  walkSpeed: 15
+  sprintSpeed: 22.5
   sprintKey: 304
   health: 0
   healthText: {fileID: 1298484343}
@@ -14360,6 +14431,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8272943599224061573, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1308443299}
+    - targetCorrespondingSourceObject: {fileID: 8272943599224061573, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1308443306}
     - targetCorrespondingSourceObject: {fileID: 8272943599224061579, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1945815964}
@@ -14486,9 +14560,11 @@ MonoBehaviour:
   walkPoint: {x: 0, y: 0, z: 0}
   hitSound: {fileID: 8300000, guid: 6f0082aea98fb4cfc8617de0e484d243, type: 3}
   walkRange: 2
+  windUpTime: 0.5
   attackCooldown: 2.5
   attackTime: 1.5
   playerHealth: {fileID: 1586257568}
+  enemyHealth: {fileID: 1890698074}
 --- !u!195 &1890698069
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -14608,6 +14684,35 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1890698074 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3955276084100828180, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+  m_PrefabInstance: {fileID: 747626985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890698058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb173c6b39154047aa5fc02634f55c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1890698077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890698058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b808b9bf430074eadb5f2a5bffc083d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDone:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1897589696 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4733772755456769034, guid: 3ad7a1cffb2556547a8b7e60fd320431, type: 3}

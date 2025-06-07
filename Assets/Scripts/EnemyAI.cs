@@ -17,6 +17,7 @@ public class EnemyAI : MonoBehaviour
     public AudioClip hitSound;
     private bool pointSet;
     public float walkRange;
+    public float windUpTime = 0.5f;
     public float attackCooldown = 2.5f;
     public float attackTime = 1f;
     private bool attackAllowed = true;
@@ -25,6 +26,8 @@ public class EnemyAI : MonoBehaviour
     public PlayerHealth playerHealth;
     private bool isSwinging = false;
     private GameObject goblin;
+    public EnemyHealth enemyHealth;
+    private bool alreadyHit = false;
 
     private void Awake()
     {
@@ -117,7 +120,6 @@ public class EnemyAI : MonoBehaviour
         {
             clubCollider.enabled = true;
             attackAllowed = false;
-            isSwinging = true;
             animator.ResetTrigger("Walk");
             animator.SetTrigger("Attack");
             StartCoroutine(ResetAttackTime());
@@ -126,13 +128,14 @@ public class EnemyAI : MonoBehaviour
     }
 
     public void Hit() {
-        if (isSwinging) 
+        if (isSwinging && !enemyHealth.isDead && !alreadyHit)
         {
             if (playerHealth.health >= 0)
             {
                 GetComponent<AudioSource>().PlayOneShot(hitSound);
             }
             playerHealth.TakeDamage(goblin);
+            alreadyHit = true;
         }
     }
 
@@ -146,8 +149,11 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator ResetAttackTime()
     {
+        yield return new WaitForSeconds(windUpTime);
+        isSwinging = true;
         yield return new WaitForSeconds(attackTime);
         clubCollider.enabled = false;
         isSwinging = false;
+        alreadyHit = false;
     }
 }

@@ -25,6 +25,7 @@ public class PlayerMove : MonoBehaviour
     private float stepTimer;
     public AudioClip jumpStartClip;
     public AudioClip jumpLandClip;
+    public AudioClip coinPickUp;
     private bool wasGroundedLastFrame;
     private bool hasLandedOnce = false;
     private GameObject[] collectibles;
@@ -34,8 +35,8 @@ public class PlayerMove : MonoBehaviour
     public GameObject endTextDisplay;
     public TextMeshProUGUI endText;
     public GameObject againButton;
-    private float walkSpeed = 15f;
-    private float sprintSpeed = 30f;
+    public float walkSpeed = 12.5f;
+    public float sprintSpeed = 20f;
     public KeyCode sprintKey = KeyCode.LeftShift;
     private float currentSpeed;
     private float fallMultiplier = 2f;
@@ -187,6 +188,7 @@ public class PlayerMove : MonoBehaviour
             other.gameObject.SetActive(false);
             score += 1;
             scoreText.text = "Score: " + score.ToString();
+            footstepAudio.PlayOneShot(coinPickUp);
         }
         // else if (other.CompareTag("Lava"))
         // {
