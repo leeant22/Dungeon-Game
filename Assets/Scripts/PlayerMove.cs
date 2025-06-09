@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Transactions;
+using System.Collections;
 public class PlayerMove : MonoBehaviour
 {
     public float moveSpeed;
@@ -32,9 +33,8 @@ public class PlayerMove : MonoBehaviour
     private int score;
     public TextMeshProUGUI scoreText;
     private Vector3 startingPosition;
-    public GameObject endTextDisplay;
-    public TextMeshProUGUI endText;
     public GameObject againButton;
+    public GameObject mainButton;
     public float walkSpeed = 12.5f;
     public float sprintSpeed = 20f;
     public KeyCode sprintKey = KeyCode.LeftShift;
@@ -44,6 +44,10 @@ public class PlayerMove : MonoBehaviour
     public int health;
     public TextMeshProUGUI healthText;
     public bool playerIsAlive;
+    public GameObject deathScreen;
+    public GameObject winScreen;
+    public GameObject winAgainButton;
+    public GameObject winMainButton;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -64,13 +68,18 @@ public class PlayerMove : MonoBehaviour
         // healthText.text = "Health: " + health.ToString();
 
         startingPosition = transform.position;
-        endTextDisplay.SetActive(false);
         againButton.SetActive(false);
+        mainButton.SetActive(false);
+        deathScreen.SetActive(false);
+        winAgainButton.SetActive(false);
+        winMainButton.SetActive(false);
+        winScreen.SetActive(false);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -213,21 +222,19 @@ public class PlayerMove : MonoBehaviour
     public void PlayerDead()
     {
         playerIsAlive = false;
-        endTextDisplay.SetActive(true);
-        endText.text = "You died!";
-        againButton.SetActive(true);
+        deathScreen.SetActive(true);
         rb.linearVelocity = Vector3.zero;
         rb.isKinematic = true;
+        StartCoroutine(RenderPlayAgain());
     }
 
     public void PlayerWin()
     {
         playerIsAlive = false;
-        endTextDisplay.SetActive(true);
-        endText.text = "You Win!";
-        againButton.SetActive(true);
+        winScreen.SetActive(true);
         rb.linearVelocity = Vector3.zero;
         rb.isKinematic = true;
+        StartCoroutine(RenderWin());
     }
 
     public void ResetPlayer()
@@ -236,8 +243,18 @@ public class PlayerMove : MonoBehaviour
         score = 0;
         scoreText.text = "Score: " + score.ToString();
         playerIsAlive = true;
-        endTextDisplay.SetActive(false);
         againButton.SetActive(false);
+        deathScreen.SetActive(false);
+        mainButton.SetActive(false);
+        winAgainButton.SetActive(false);
+        winMainButton.SetActive(false);
+        winScreen.SetActive(false);
+    }
+
+    public void MainMenu()
+    {
+        ResetPlayer();
+        SceneManager.LoadScene("Main Menu");
     }
 
     private void BetterJumpGravity()
@@ -250,5 +267,19 @@ public class PlayerMove : MonoBehaviour
         {
             rb.AddForce(Vector3.up * (lowJumpMultiplier - 1) * Physics.gravity.y, ForceMode.Acceleration);
         }
+    }
+
+    private IEnumerator RenderWin()
+    {
+        yield return new WaitForSeconds(1.5f);
+        winAgainButton.SetActive(true);
+        winMainButton.SetActive(true);
+    }
+
+    private IEnumerator RenderPlayAgain()
+    {
+        yield return new WaitForSeconds(1.5f);
+        againButton.SetActive(true);
+        mainButton.SetActive(true);
     }
 }
